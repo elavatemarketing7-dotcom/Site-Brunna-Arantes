@@ -3,8 +3,13 @@ import { QuizQuestion, GalleryImage } from './types';
 
 export const EXPERT_NAME = "Brunna Arantes";
 export const WHATSAPP_PHONE = "5564993409898";
-export const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_PHONE}`;
-export const WHATSAPP_URL = WHATSAPP_BASE_URL;
+
+// Link base fornecido pelo usuário para uso direto
+export const WHATSAPP_URL = "https://api.whatsapp.com/send/?phone=5564993409898&text&type=phone_number&app_absent=0&utm_source=ig";
+
+// Link base para construção de mensagens dinâmicas (Quiz)
+export const WHATSAPP_BASE_URL = "https://api.whatsapp.com/send";
+
 export const INSTAGRAM_URL = "https://www.instagram.com/dra.brunnaarantes/";
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [

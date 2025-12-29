@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Instagram, MessageCircle, Star, Shield, Heart, MapPin, X, CheckCircle, Sparkles, UserCheck, ArrowRight, Eye, MousePointer2, Check } from 'lucide-react';
-import { EXPERT_NAME, WHATSAPP_URL, WHATSAPP_BASE_URL, INSTAGRAM_URL, QUIZ_QUESTIONS, TRANSFORMATION_RESULTS, SIGNATURE_RESULTS, TRUST_CARDS } from './constants';
+import { EXPERT_NAME, WHATSAPP_URL, WHATSAPP_BASE_URL, WHATSAPP_PHONE, INSTAGRAM_URL, QUIZ_QUESTIONS, TRANSFORMATION_RESULTS, SIGNATURE_RESULTS, TRUST_CARDS } from './constants';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'CHOICE' | 'QUIZ' | 'RESULT' | 'LANDING'>('CHOICE');
@@ -29,8 +29,9 @@ const App: React.FC = () => {
   const getWhatsappMessage = (includeQuiz: boolean) => {
     if (!includeQuiz) return WHATSAPP_URL;
     const summary = QUIZ_QUESTIONS.map((q, i) => `*${q.question}*\nR: ${answers[i]}`).join('\n\n');
-    const fullText = `Olá Dra. Brunna! Acabei de fazer a avaliação de perfil:\n\n${summary}`;
-    return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(fullText)}`;
+    const fullText = `Olá Dra. Brunna! Acabei de fazer a avaliação de perfil no seu site:\n\n${summary}`;
+    // Formato api.whatsapp.com/send?phone=...&text=...
+    return `${WHATSAPP_BASE_URL}?phone=${WHATSAPP_PHONE}&text=${encodeURIComponent(fullText)}`;
   };
 
   const LandingContent = () => (
@@ -60,7 +61,7 @@ const App: React.FC = () => {
             <h1 className="font-serif text-5xl md:text-7xl font-bold text-stone-900 leading-[1.1]">Eu sou <span className="text-premium-gold italic">Brunna Arantes</span></h1>
             <p className="text-stone-600 text-lg font-medium leading-relaxed">Especialista em realçar sua beleza natural com segurança, exclusividade e resultados polidos.</p>
             <div className="flex flex-col space-y-4 pt-4">
-              <a href={WHATSAPP_URL} className="inline-flex items-center justify-center bg-stone-900 text-white px-8 py-5 rounded-2xl font-bold text-lg space-x-3 shadow-2xl animate-soft-pulse active:scale-95">
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center bg-stone-900 text-white px-8 py-5 rounded-2xl font-bold text-lg space-x-3 shadow-2xl animate-soft-pulse active:scale-95 transition-all">
                 <MessageCircle size={22} />
                 <span>Agendar consulta gratuita</span>
               </a>
@@ -131,7 +132,7 @@ const App: React.FC = () => {
       <section className="py-20 bg-stone-900 text-center text-white">
         <div className="container mx-auto px-6">
           <h2 className="font-serif text-3xl font-bold mb-8">Sua melhor versão está a um clique.</h2>
-          <a href={WHATSAPP_URL} className="inline-flex items-center space-x-3 bg-premium-gold text-stone-900 px-10 py-5 rounded-2xl font-bold text-lg shadow-xl active:scale-95">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-3 bg-premium-gold text-stone-900 px-10 py-5 rounded-2xl font-bold text-lg shadow-xl active:scale-95 transition-all">
             <MessageCircle size={24} />
             <span>Chamar no WhatsApp</span>
           </a>
@@ -175,7 +176,7 @@ const App: React.FC = () => {
         <div className="container mx-auto px-6 max-w-xl space-y-8">
           <h2 className="font-serif text-5xl font-bold leading-tight">Invista no seu rosto e na sua autoestima.</h2>
           <p className="text-stone-400">Garanta agora sua primeira consulta de avaliação gratuita. Atendimento exclusivo em Rio Verde - GO.</p>
-          <a href={WHATSAPP_URL} className="inline-flex items-center space-x-4 bg-premium-gold text-stone-900 px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl active:scale-95">
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center space-x-4 bg-premium-gold text-stone-900 px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl active:scale-95 transition-all">
             <MessageCircle size={28} />
             <span>Reservar meu horário</span>
           </a>
@@ -193,8 +194,8 @@ const App: React.FC = () => {
           <p>© {new Date().getFullYear()} • TODOS OS DIREITOS RESERVADOS</p>
         </div>
         <div className="flex justify-center space-x-6 text-stone-300">
-          <a href={INSTAGRAM_URL} target="_blank" className="hover:text-stone-900"><Instagram size={20} /></a>
-          <a href={WHATSAPP_URL} target="_blank" className="hover:text-stone-900"><MessageCircle size={20} /></a>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-stone-900"><Instagram size={20} /></a>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-stone-900"><MessageCircle size={20} /></a>
         </div>
       </footer>
     </main>
@@ -205,18 +206,30 @@ const App: React.FC = () => {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-stone-900/40 backdrop-blur-md">
         <div className="bg-white rounded-[2.5rem] p-10 max-w-sm w-full shadow-2xl flex flex-col items-center text-center space-y-8 animate-in zoom-in duration-500">
-          <div className="w-20 h-20 bg-premium-gold/10 rounded-full flex items-center justify-center text-premium-gold"><UserCheck size={40} /></div>
+          <div className="relative">
+            <div className="w-32 h-32 rounded-full p-1 bg-premium-gold shadow-2xl animate-soft-pulse">
+              <img 
+                src="https://i.imgur.com/5tcwWbe.png" 
+                alt="Dra. Brunna" 
+                className="w-full h-full object-cover object-top rounded-full border-4 border-white"
+              />
+            </div>
+            <div className="absolute -bottom-1 -right-1 bg-white p-2 rounded-full shadow-lg">
+              <Sparkles size={16} className="text-premium-gold animate-pulse" />
+            </div>
+          </div>
+
           <div className="space-y-2">
-            <h1 className="font-serif text-2xl font-bold text-stone-900 uppercase tracking-widest">Bem-vinda</h1>
-            <p className="text-stone-500 text-sm">Como deseja iniciar sua experiência?</p>
+            <h1 className="font-serif text-3xl font-bold text-stone-900 uppercase tracking-widest">Bem-vinda</h1>
+            <p className="text-stone-500 text-sm font-medium">Como deseja iniciar sua experiência?</p>
           </div>
           <div className="w-full space-y-3">
-            <button onClick={() => setView('QUIZ')} className="w-full bg-stone-900 text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-xs flex justify-between px-6 items-center group active:scale-95">
+            <button onClick={() => setView('QUIZ')} className="w-full bg-stone-900 text-white py-5 rounded-2xl font-bold uppercase tracking-widest text-xs flex justify-between px-6 items-center group active:scale-95 shadow-xl transition-all">
               <span>Avaliação Premium</span> <ChevronRight size={18} className="group-hover:translate-x-1" />
             </button>
-            <button onClick={() => setView('LANDING')} className="w-full text-stone-400 py-4 font-bold uppercase tracking-[0.2em] text-[10px]">Apenas conhecer o site</button>
+            <button onClick={() => setView('LANDING')} className="w-full text-stone-400 py-4 font-bold uppercase tracking-[0.2em] text-[10px] hover:text-stone-600 transition-colors">Apenas conhecer o site</button>
           </div>
-          <p className="text-[9px] text-stone-300 font-black italic tracking-[0.4em]">Dra. {EXPERT_NAME}</p>
+          <p className="text-[9px] text-stone-300 font-black italic tracking-[0.5em] uppercase">Dra. {EXPERT_NAME}</p>
         </div>
       </div>
     );
@@ -225,7 +238,12 @@ const App: React.FC = () => {
   if (view === 'QUIZ') {
     const progress = ((currentQuestion + 1) / QUIZ_QUESTIONS.length) * 100;
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-lg">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="absolute inset-0 z-0">
+          <img src="https://i.imgur.com/5tcwWbe.png" alt="Fundo Quiz" className="w-full h-full object-cover object-top" />
+          <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-md"></div>
+        </div>
+        
         <div className="relative z-10 w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl flex flex-col animate-in slide-in-from-bottom-10 duration-500 overflow-hidden">
           <div className="px-8 pt-10 pb-4 flex justify-between items-center">
              <div className="flex flex-col"><span className="text-[9px] font-black uppercase text-premium-gold tracking-widest">Dra. {EXPERT_NAME}</span><span className="text-[10px] text-stone-400 font-bold uppercase">Análise de Perfil</span></div>
@@ -250,7 +268,12 @@ const App: React.FC = () => {
 
   if (view === 'RESULT') {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/70 backdrop-blur-2xl">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="absolute inset-0 z-0">
+          <img src="https://i.imgur.com/oNSkLLs.png" alt="Fundo Resultado" className="w-full h-full object-cover object-center" />
+          <div className="absolute inset-0 bg-stone-900/70 backdrop-blur-xl"></div>
+        </div>
+
         <div className="w-full max-w-sm bg-white rounded-[3rem] p-8 shadow-2xl flex flex-col items-center text-center animate-in zoom-in duration-500 relative border border-white/20">
           <div className="absolute top-0 left-0 w-full h-3 bg-premium-gold"></div>
           <div className="relative mb-8 mt-4">
@@ -263,10 +286,10 @@ const App: React.FC = () => {
             <p className="text-stone-500 text-sm leading-relaxed">Você é a paciente ideal para o <b>Método Brunna Arantes</b>. Conseguimos entregar exatamente a naturalidade que você procura.</p>
           </div>
           <div className="w-full space-y-3">
-            <a href={getWhatsappMessage(true)} target="_blank" className="w-full bg-green-500 text-white py-5 rounded-2xl font-bold text-base flex justify-center items-center space-x-3 shadow-xl animate-soft-pulse active:scale-95 transition-all">
+            <a href={getWhatsappMessage(true)} target="_blank" rel="noopener noreferrer" className="w-full bg-green-500 text-white py-5 rounded-2xl font-bold text-base flex justify-center items-center space-x-3 shadow-xl animate-soft-pulse active:scale-95 transition-all">
               <MessageCircle size={22} /> <span>1- Enviar minha avaliação DRA</span>
             </a>
-            <a href={WHATSAPP_URL} target="_blank" className="w-full bg-stone-900 text-white py-4 rounded-2xl font-bold text-xs flex justify-center items-center space-x-2 active:scale-95 transition-all">
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="w-full bg-stone-900 text-white py-4 rounded-2xl font-bold text-xs flex justify-center items-center space-x-2 active:scale-95 transition-all">
               <MessageCircle size={18} /> <span>2- CHAMAR SEM COMPROMISSO</span>
             </a>
             <button onClick={() => setView('LANDING')} className="w-full text-stone-300 py-3 font-black uppercase tracking-widest text-[9px]">3- Ver site mesmo assim</button>
@@ -286,7 +309,7 @@ const App: React.FC = () => {
           <button className="absolute top-6 right-6 text-white p-3"><X size={32} /></button>
           <div className="max-w-md w-full flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <img src={selectedImage} className="max-w-full max-h-[70vh] rounded-2xl shadow-2xl" alt="Resultado" />
-            <a href={WHATSAPP_URL} className="mt-8 bg-premium-gold text-stone-900 px-8 py-4 rounded-xl font-bold flex items-center space-x-3 active:scale-95 shadow-xl">
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mt-8 bg-premium-gold text-stone-900 px-8 py-4 rounded-xl font-bold flex items-center space-x-3 active:scale-95 shadow-xl transition-all">
               <MessageCircle size={22} /> <span className="text-sm">Quero um resultado assim</span>
             </a>
           </div>
