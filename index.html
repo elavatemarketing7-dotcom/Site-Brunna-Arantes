@@ -12,6 +12,8 @@
         font-family: 'Montserrat', sans-serif;
         background-color: #fcfbf7;
         color: #1a1a1a;
+        margin: 0;
+        padding: 0;
       }
       .font-serif {
         font-family: 'Cormorant Garamond', serif;
@@ -39,6 +41,14 @@
       .animate-soft-pulse {
         animation: soft-pulse 3s infinite ease-in-out;
       }
+      /* Ocultar barra de rolagem mas manter funcionalidade */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
       ::-webkit-scrollbar {
         width: 8px;
       }
@@ -50,18 +60,22 @@
         border-radius: 4px;
       }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.463.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
+    <!-- Chave para o Vercel: Carregar o arquivo index.tsx como módulo -->
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
